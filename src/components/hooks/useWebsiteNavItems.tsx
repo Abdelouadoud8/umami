@@ -4,6 +4,7 @@ import {
   Clock,
   Eye,
   Flame,
+  Link as LinkIcon,
   Sheet,
   Tag,
   User,
@@ -53,6 +54,12 @@ export function useWebsiteNavItems(websiteId: string) {
           label: t(labels.sessions),
           icon: <User />,
           path: renderPath('/sessions'),
+        },
+        {
+          id: 'link-page',
+          label: 'Links page',
+          icon: <LinkIcon />,
+          path: renderPath('/link-page'),
         },
         {
           id: 'realtime',

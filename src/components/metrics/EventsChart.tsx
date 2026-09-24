@@ -17,17 +17,15 @@ export interface EventsChartProps extends BarChartProps {
   websiteId: string;
   focusLabel?: string;
   limit?: number;
-  // Extra query filters, e.g. { event: 're.^reel-' }
-  params?: Record<string, any>;
 }
 
-export function EventsChart({ websiteId, focusLabel, limit, params }: EventsChartProps) {
+export function EventsChart({ websiteId, focusLabel, limit }: EventsChartProps) {
   const { timezone } = useTimezone();
   const {
     dateRange: { startDate, endDate, unit },
   } = useDateRange({ timezone: timezone });
   const { locale, dateLocale } = useLocale();
-  const { data, isLoading, error } = useWebsiteEventsSeriesQuery(websiteId, { limit, ...params });
+  const { data, isLoading, error } = useWebsiteEventsSeriesQuery(websiteId, { limit });
   const [label, setLabel] = useState<string>(focusLabel);
   const [hiddenLabels, setHiddenLabels] = useState<Set<string>>(() => new Set());
 

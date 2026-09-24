@@ -63,3 +63,17 @@ export function useLinkPageEventsQuery(
     placeholderData: keepPreviousData,
   });
 }
+
+// Clicks per link/reel over time: [{ x: eventName, t: date, y: count }]
+export function useLinkPageClicksSeriesQuery(websiteId: string) {
+  const { get, useQuery } = useApi();
+  const { startAt, endAt, unit, timezone } = useDateParameters();
+  const filters = useFilterParameters();
+  const params = { startAt, endAt, unit, timezone, ...filters, event: LINK_CLICK_EVENTS };
+
+  return useQuery<{ x: string; t: string; y: number }[]>({
+    queryKey: ['link-page:clicks-series', { websiteId, ...params }],
+    queryFn: () => get(`/websites/${websiteId}/events/series`, params),
+    enabled: !!websiteId,
+  });
+}

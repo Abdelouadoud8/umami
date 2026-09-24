@@ -5,12 +5,13 @@ import { WebsiteControls } from '@/app/(main)/websites/[websiteId]/WebsiteContro
 import { LoadingPanel } from '@/components/common/LoadingPanel';
 import { Panel } from '@/components/common/Panel';
 import { useDateRange, useTimezone } from '@/components/hooks';
-import { EventsChart } from '@/components/metrics/EventsChart';
 import { MetricCard } from '@/components/metrics/MetricCard';
 import { MetricsBar } from '@/components/metrics/MetricsBar';
 import { MetricsTable } from '@/components/metrics/MetricsTable';
 import { PageviewsChart } from '@/components/metrics/PageviewsChart';
 import { formatLongNumber } from '@/lib/format';
+import { LinkPageItemCharts } from './LinkPageItemCharts';
+import { LinkPageTagCard } from './LinkPageTagCard';
 import {
   getLinkPageLabel,
   LINK_CLICK_EVENTS,
@@ -24,25 +25,10 @@ import {
   VISIT_SOURCE_EVENTS,
 } from './linkPageQueries';
 
-function TopItemCard({
-  label,
-  data,
-  unit,
-}: {
-  label: string;
-  data?: { x: string; y: number }[];
-  unit: string;
-}) {
+function TopItemCard({ label, data }: { label: string; data?: { x: string; y: number }[] }) {
   const [top] = data || [];
 
-  return (
-    <MetricCard
-      label={top ? `${label} · ${getLinkPageLabel(top.x)}` : label}
-      value={top?.y ?? 0}
-      formatValue={n => `${formatLongNumber(n)} ${unit}`}
-      tooltip={top?.x}
-    />
-  );
+  return <LinkPageTagCard label={label} value={top?.y} tag={getLinkPageLabel(top?.x)} />;
 }
 
 export function LinkPageStatsPage({ websiteId }: { websiteId: string }) {
@@ -88,9 +74,9 @@ export function LinkPageStatsPage({ websiteId }: { websiteId: string }) {
             formatValue={formatLongNumber}
             showChange={!isAllTime}
           />
-          <TopItemCard label="Top social link" data={topSocial.data} unit="clicks" />
-          <TopItemCard label="Top reel" data={topReel.data} unit="clicks" />
-          <TopItemCard label="Top source" data={topSource.data} unit="visits" />
+          <TopItemCard label="Top social link (clicks)" data={topSocial.data} />
+          <TopItemCard label="Top reel (clicks)" data={topReel.data} />
+          <TopItemCard label="Top source (visits)" data={topSource.data} />
         </MetricsBar>
       </LoadingPanel>
       <Panel title={`Visits on ${LINK_PAGE_PATH}`}>
@@ -109,21 +95,17 @@ export function LinkPageStatsPage({ websiteId }: { websiteId: string }) {
           />
         </LoadingPanel>
       </Panel>
-      <Panel title="Clicks per link and reel">
-        <Column gap="6">
-          <Column border="bottom" paddingBottom="6">
-            <EventsChart websiteId={websiteId} limit={20} params={{ event: LINK_CLICK_EVENTS }} />
-          </Column>
-          <MetricsTable
-            websiteId={websiteId}
-            type="event"
-            title="Link / reel"
-            metric="Clicks"
-            limit={50}
-            filterLink={false}
-            params={{ event: LINK_CLICK_EVENTS }}
-          />
-        </Column>
+      <LinkPageItemCharts websiteId={websiteId} />
+      <Panel title="Clicks ranking">
+        <MetricsTable
+          websiteId={websiteId}
+          type="event"
+          title="Link / reel"
+          metric="Clicks"
+          limit={50}
+          filterLink={false}
+          params={{ event: LINK_CLICK_EVENTS }}
+        />
       </Panel>
     </Column>
   );

@@ -5,7 +5,7 @@ import { useFilterParameters } from '../useFilterParameters';
 
 export function useWebsiteEventsSeriesQuery(
   websiteId: string,
-  params?: { limit?: number } & Record<string, any>,
+  params?: { limit?: number },
   options?: ReactQueryOptions,
 ) {
   const { get, useQuery } = useApi();

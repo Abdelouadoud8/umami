@@ -1,5 +1,6 @@
 import {
   AlignEndHorizontal,
+  Camera,
   ChartPie,
   Clock,
   Eye,
@@ -60,6 +61,12 @@ export function useWebsiteNavItems(websiteId: string) {
           label: 'Links page',
           icon: <LinkIcon />,
           path: renderPath('/link-page'),
+        },
+        {
+          id: 'instagram',
+          label: 'Instagram',
+          icon: <Camera />,
+          path: renderPath('/instagram'),
         },
         {
           id: 'realtime',

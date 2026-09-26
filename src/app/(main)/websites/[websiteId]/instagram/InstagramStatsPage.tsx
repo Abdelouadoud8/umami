@@ -2,7 +2,6 @@
 import { Column, DataColumn, DataTable, Text } from '@umami/react-zen';
 import { LoadingPanel } from '@/components/common/LoadingPanel';
 import { Panel } from '@/components/common/Panel';
-import { formatLongNumber } from '@/lib/format';
 import { InstagramGenderCharts } from './InstagramGenderCharts';
 import { useInstagramDailyQuery } from './instagramQueries';
 
@@ -30,7 +29,7 @@ export function InstagramStatsPage({ websiteId }: { websiteId: string }) {
             <DataTable data={data || []}>
               <DataColumn id="statDate" label="Date" />
               <DataColumn id="followers" label="Followers" align="end">
-                {(row: any) => formatLongNumber(row.followers)}
+                {(row: any) => row.followers.toLocaleString('en')}
               </DataColumn>
               <DataColumn id="newFollowers" label="New followers" align="end">
                 {(row: any) => <Change value={row.newFollowers} />}
